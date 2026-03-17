@@ -82,3 +82,41 @@ sudo -u easyshift -H bash -lc 'cd /srv/easyshift/current && set -a && . ./.env &
 ```
 
 This reloads the API with the new whitelist without touching the Mini App build.
+
+### GitHub Actions: auto deploy from `main`
+
+To make every push to `main` automatically deploy to the VDS, the repository contains a GitHub Actions workflow:
+
+- `.github/workflows/deploy.yml`
+
+It expects these GitHub Secrets to be configured in the `EasyShift` repository:
+
+- `SSH_HOST` – server IP or hostname (e.g. `5.42.117.107`).
+- `SSH_USER` – SSH user with rights to manage `/srv/easyshift` and `pm2` (typically `root`).
+- `SSH_KEY` – private SSH key for this user (PEM/OPENSSH format, without passphrase).
+- `SSH_PORT` – SSH port (optional, defaults to `22`).
+
+#### One-time server setup for git-based deploy
+
+Run these commands once on the server (as `root` or another admin user):
+
+```bash
+cd /srv/easyshift
+
+# If there is no git repo yet:
+rm -rf current
+git clone git@github.com:sebegolov/EasyShift.git current
+cd current
+
+# Ensure production .env is in place (do NOT commit it)
+ls .env
+```
+
+After this, the workflow will:
+
+1. SSH into the server.
+2. Run `git fetch origin main && git reset --hard origin/main` in `/srv/easyshift/current`.
+3. Run `npm install --omit=dev` if `package-lock.json` is present.
+4. Optionally run `npx prisma db push` with `apps/api/prisma/schema.prisma`.
+5. Restart `easyshift-api` and `easyshift-bot` via `pm2`.
+6. Reload Nginx if the config is valid.

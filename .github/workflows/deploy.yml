@@ -1,0 +1,48 @@
+name: Deploy to EasyShift VDS
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository (for reference)
+        uses: actions/checkout@v4
+
+      - name: Deploy over SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT || 22 }}
+          script: |
+            set -e
+
+            cd /srv/easyshift/current
+
+            # Обновить код из GitHub (репозиторий должен быть уже настроен на сервере)
+            git fetch origin main
+            git reset --hard origin/main
+
+            # Обновить зависимости при необходимости
+            if [ -f package-lock.json ]; then
+              npm install --omit=dev
+            fi
+
+            # Применить схему БД (опционально, если есть изменения)
+            if [ -f apps/api/prisma/schema.prisma ]; then
+              npx prisma db push --schema apps/api/prisma/schema.prisma
+            fi
+
+            # Перезапустить процессы API и бота под пользователем easyshift
+            sudo -u easyshift -H pm2 restart easyshift-api --update-env || true
+            sudo -u easyshift -H pm2 restart easyshift-bot --update-env || true
+
+            # Перезагрузить Nginx, если конфиги менялись
+            nginx -t && sudo systemctl reload nginx
+
