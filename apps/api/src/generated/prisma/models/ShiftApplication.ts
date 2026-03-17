@@ -9,8 +9,8 @@
  * 🟢 You can import this file directly.
  */
 import type * as runtime from "@prisma/client/runtime/client"
-import type * as $Enums from "../enums"
-import type * as Prisma from "../internal/prismaNamespace"
+import type * as $Enums from "../enums.ts"
+import type * as Prisma from "../internal/prismaNamespace.ts"
 
 /**
  * Model ShiftApplication
@@ -241,6 +241,7 @@ export type ShiftApplicationWhereInput = {
   status?: Prisma.StringFilter<"ShiftApplication"> | string
   createdAt?: Prisma.DateTimeFilter<"ShiftApplication"> | Date | string
   shift?: Prisma.XOR<Prisma.ShiftScalarRelationFilter, Prisma.ShiftWhereInput>
+  workerProfile?: Prisma.XOR<Prisma.WorkerProfileScalarRelationFilter, Prisma.WorkerProfileWhereInput>
 }
 
 export type ShiftApplicationOrderByWithRelationInput = {
@@ -253,6 +254,7 @@ export type ShiftApplicationOrderByWithRelationInput = {
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   shift?: Prisma.ShiftOrderByWithRelationInput
+  workerProfile?: Prisma.WorkerProfileOrderByWithRelationInput
 }
 
 export type ShiftApplicationWhereUniqueInput = Prisma.AtLeast<{
@@ -268,6 +270,7 @@ export type ShiftApplicationWhereUniqueInput = Prisma.AtLeast<{
   status?: Prisma.StringFilter<"ShiftApplication"> | string
   createdAt?: Prisma.DateTimeFilter<"ShiftApplication"> | Date | string
   shift?: Prisma.XOR<Prisma.ShiftScalarRelationFilter, Prisma.ShiftWhereInput>
+  workerProfile?: Prisma.XOR<Prisma.WorkerProfileScalarRelationFilter, Prisma.WorkerProfileWhereInput>
 }, "id">
 
 export type ShiftApplicationOrderByWithAggregationInput = {
@@ -302,13 +305,13 @@ export type ShiftApplicationScalarWhereWithAggregatesInput = {
 
 export type ShiftApplicationCreateInput = {
   id?: string
-  workerId: string
   proposedRate?: number | null
   isOutOfZoneOffer?: boolean
   message?: string | null
   status: string
   createdAt?: Date | string
   shift: Prisma.ShiftCreateNestedOneWithoutApplicationsInput
+  workerProfile: Prisma.WorkerProfileCreateNestedOneWithoutApplicationsInput
 }
 
 export type ShiftApplicationUncheckedCreateInput = {
@@ -324,13 +327,13 @@ export type ShiftApplicationUncheckedCreateInput = {
 
 export type ShiftApplicationUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  workerId?: Prisma.StringFieldUpdateOperationsInput | string
   proposedRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   isOutOfZoneOffer?: Prisma.BoolFieldUpdateOperationsInput | boolean
   message?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   shift?: Prisma.ShiftUpdateOneRequiredWithoutApplicationsNestedInput
+  workerProfile?: Prisma.WorkerProfileUpdateOneRequiredWithoutApplicationsNestedInput
 }
 
 export type ShiftApplicationUncheckedUpdateInput = {
@@ -357,7 +360,6 @@ export type ShiftApplicationCreateManyInput = {
 
 export type ShiftApplicationUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  workerId?: Prisma.StringFieldUpdateOperationsInput | string
   proposedRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   isOutOfZoneOffer?: Prisma.BoolFieldUpdateOperationsInput | boolean
   message?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -427,6 +429,48 @@ export type ShiftApplicationSumOrderByAggregateInput = {
   proposedRate?: Prisma.SortOrder
 }
 
+export type ShiftApplicationCreateNestedManyWithoutWorkerProfileInput = {
+  create?: Prisma.XOR<Prisma.ShiftApplicationCreateWithoutWorkerProfileInput, Prisma.ShiftApplicationUncheckedCreateWithoutWorkerProfileInput> | Prisma.ShiftApplicationCreateWithoutWorkerProfileInput[] | Prisma.ShiftApplicationUncheckedCreateWithoutWorkerProfileInput[]
+  connectOrCreate?: Prisma.ShiftApplicationCreateOrConnectWithoutWorkerProfileInput | Prisma.ShiftApplicationCreateOrConnectWithoutWorkerProfileInput[]
+  createMany?: Prisma.ShiftApplicationCreateManyWorkerProfileInputEnvelope
+  connect?: Prisma.ShiftApplicationWhereUniqueInput | Prisma.ShiftApplicationWhereUniqueInput[]
+}
+
+export type ShiftApplicationUncheckedCreateNestedManyWithoutWorkerProfileInput = {
+  create?: Prisma.XOR<Prisma.ShiftApplicationCreateWithoutWorkerProfileInput, Prisma.ShiftApplicationUncheckedCreateWithoutWorkerProfileInput> | Prisma.ShiftApplicationCreateWithoutWorkerProfileInput[] | Prisma.ShiftApplicationUncheckedCreateWithoutWorkerProfileInput[]
+  connectOrCreate?: Prisma.ShiftApplicationCreateOrConnectWithoutWorkerProfileInput | Prisma.ShiftApplicationCreateOrConnectWithoutWorkerProfileInput[]
+  createMany?: Prisma.ShiftApplicationCreateManyWorkerProfileInputEnvelope
+  connect?: Prisma.ShiftApplicationWhereUniqueInput | Prisma.ShiftApplicationWhereUniqueInput[]
+}
+
+export type ShiftApplicationUpdateManyWithoutWorkerProfileNestedInput = {
+  create?: Prisma.XOR<Prisma.ShiftApplicationCreateWithoutWorkerProfileInput, Prisma.ShiftApplicationUncheckedCreateWithoutWorkerProfileInput> | Prisma.ShiftApplicationCreateWithoutWorkerProfileInput[] | Prisma.ShiftApplicationUncheckedCreateWithoutWorkerProfileInput[]
+  connectOrCreate?: Prisma.ShiftApplicationCreateOrConnectWithoutWorkerProfileInput | Prisma.ShiftApplicationCreateOrConnectWithoutWorkerProfileInput[]
+  upsert?: Prisma.ShiftApplicationUpsertWithWhereUniqueWithoutWorkerProfileInput | Prisma.ShiftApplicationUpsertWithWhereUniqueWithoutWorkerProfileInput[]
+  createMany?: Prisma.ShiftApplicationCreateManyWorkerProfileInputEnvelope
+  set?: Prisma.ShiftApplicationWhereUniqueInput | Prisma.ShiftApplicationWhereUniqueInput[]
+  disconnect?: Prisma.ShiftApplicationWhereUniqueInput | Prisma.ShiftApplicationWhereUniqueInput[]
+  delete?: Prisma.ShiftApplicationWhereUniqueInput | Prisma.ShiftApplicationWhereUniqueInput[]
+  connect?: Prisma.ShiftApplicationWhereUniqueInput | Prisma.ShiftApplicationWhereUniqueInput[]
+  update?: Prisma.ShiftApplicationUpdateWithWhereUniqueWithoutWorkerProfileInput | Prisma.ShiftApplicationUpdateWithWhereUniqueWithoutWorkerProfileInput[]
+  updateMany?: Prisma.ShiftApplicationUpdateManyWithWhereWithoutWorkerProfileInput | Prisma.ShiftApplicationUpdateManyWithWhereWithoutWorkerProfileInput[]
+  deleteMany?: Prisma.ShiftApplicationScalarWhereInput | Prisma.ShiftApplicationScalarWhereInput[]
+}
+
+export type ShiftApplicationUncheckedUpdateManyWithoutWorkerProfileNestedInput = {
+  create?: Prisma.XOR<Prisma.ShiftApplicationCreateWithoutWorkerProfileInput, Prisma.ShiftApplicationUncheckedCreateWithoutWorkerProfileInput> | Prisma.ShiftApplicationCreateWithoutWorkerProfileInput[] | Prisma.ShiftApplicationUncheckedCreateWithoutWorkerProfileInput[]
+  connectOrCreate?: Prisma.ShiftApplicationCreateOrConnectWithoutWorkerProfileInput | Prisma.ShiftApplicationCreateOrConnectWithoutWorkerProfileInput[]
+  upsert?: Prisma.ShiftApplicationUpsertWithWhereUniqueWithoutWorkerProfileInput | Prisma.ShiftApplicationUpsertWithWhereUniqueWithoutWorkerProfileInput[]
+  createMany?: Prisma.ShiftApplicationCreateManyWorkerProfileInputEnvelope
+  set?: Prisma.ShiftApplicationWhereUniqueInput | Prisma.ShiftApplicationWhereUniqueInput[]
+  disconnect?: Prisma.ShiftApplicationWhereUniqueInput | Prisma.ShiftApplicationWhereUniqueInput[]
+  delete?: Prisma.ShiftApplicationWhereUniqueInput | Prisma.ShiftApplicationWhereUniqueInput[]
+  connect?: Prisma.ShiftApplicationWhereUniqueInput | Prisma.ShiftApplicationWhereUniqueInput[]
+  update?: Prisma.ShiftApplicationUpdateWithWhereUniqueWithoutWorkerProfileInput | Prisma.ShiftApplicationUpdateWithWhereUniqueWithoutWorkerProfileInput[]
+  updateMany?: Prisma.ShiftApplicationUpdateManyWithWhereWithoutWorkerProfileInput | Prisma.ShiftApplicationUpdateManyWithWhereWithoutWorkerProfileInput[]
+  deleteMany?: Prisma.ShiftApplicationScalarWhereInput | Prisma.ShiftApplicationScalarWhereInput[]
+}
+
 export type ShiftApplicationCreateNestedManyWithoutShiftInput = {
   create?: Prisma.XOR<Prisma.ShiftApplicationCreateWithoutShiftInput, Prisma.ShiftApplicationUncheckedCreateWithoutShiftInput> | Prisma.ShiftApplicationCreateWithoutShiftInput[] | Prisma.ShiftApplicationUncheckedCreateWithoutShiftInput[]
   connectOrCreate?: Prisma.ShiftApplicationCreateOrConnectWithoutShiftInput | Prisma.ShiftApplicationCreateOrConnectWithoutShiftInput[]
@@ -469,14 +513,74 @@ export type ShiftApplicationUncheckedUpdateManyWithoutShiftNestedInput = {
   deleteMany?: Prisma.ShiftApplicationScalarWhereInput | Prisma.ShiftApplicationScalarWhereInput[]
 }
 
-export type ShiftApplicationCreateWithoutShiftInput = {
+export type ShiftApplicationCreateWithoutWorkerProfileInput = {
   id?: string
-  workerId: string
   proposedRate?: number | null
   isOutOfZoneOffer?: boolean
   message?: string | null
   status: string
   createdAt?: Date | string
+  shift: Prisma.ShiftCreateNestedOneWithoutApplicationsInput
+}
+
+export type ShiftApplicationUncheckedCreateWithoutWorkerProfileInput = {
+  id?: string
+  shiftId: string
+  proposedRate?: number | null
+  isOutOfZoneOffer?: boolean
+  message?: string | null
+  status: string
+  createdAt?: Date | string
+}
+
+export type ShiftApplicationCreateOrConnectWithoutWorkerProfileInput = {
+  where: Prisma.ShiftApplicationWhereUniqueInput
+  create: Prisma.XOR<Prisma.ShiftApplicationCreateWithoutWorkerProfileInput, Prisma.ShiftApplicationUncheckedCreateWithoutWorkerProfileInput>
+}
+
+export type ShiftApplicationCreateManyWorkerProfileInputEnvelope = {
+  data: Prisma.ShiftApplicationCreateManyWorkerProfileInput | Prisma.ShiftApplicationCreateManyWorkerProfileInput[]
+  skipDuplicates?: boolean
+}
+
+export type ShiftApplicationUpsertWithWhereUniqueWithoutWorkerProfileInput = {
+  where: Prisma.ShiftApplicationWhereUniqueInput
+  update: Prisma.XOR<Prisma.ShiftApplicationUpdateWithoutWorkerProfileInput, Prisma.ShiftApplicationUncheckedUpdateWithoutWorkerProfileInput>
+  create: Prisma.XOR<Prisma.ShiftApplicationCreateWithoutWorkerProfileInput, Prisma.ShiftApplicationUncheckedCreateWithoutWorkerProfileInput>
+}
+
+export type ShiftApplicationUpdateWithWhereUniqueWithoutWorkerProfileInput = {
+  where: Prisma.ShiftApplicationWhereUniqueInput
+  data: Prisma.XOR<Prisma.ShiftApplicationUpdateWithoutWorkerProfileInput, Prisma.ShiftApplicationUncheckedUpdateWithoutWorkerProfileInput>
+}
+
+export type ShiftApplicationUpdateManyWithWhereWithoutWorkerProfileInput = {
+  where: Prisma.ShiftApplicationScalarWhereInput
+  data: Prisma.XOR<Prisma.ShiftApplicationUpdateManyMutationInput, Prisma.ShiftApplicationUncheckedUpdateManyWithoutWorkerProfileInput>
+}
+
+export type ShiftApplicationScalarWhereInput = {
+  AND?: Prisma.ShiftApplicationScalarWhereInput | Prisma.ShiftApplicationScalarWhereInput[]
+  OR?: Prisma.ShiftApplicationScalarWhereInput[]
+  NOT?: Prisma.ShiftApplicationScalarWhereInput | Prisma.ShiftApplicationScalarWhereInput[]
+  id?: Prisma.StringFilter<"ShiftApplication"> | string
+  shiftId?: Prisma.StringFilter<"ShiftApplication"> | string
+  workerId?: Prisma.StringFilter<"ShiftApplication"> | string
+  proposedRate?: Prisma.FloatNullableFilter<"ShiftApplication"> | number | null
+  isOutOfZoneOffer?: Prisma.BoolFilter<"ShiftApplication"> | boolean
+  message?: Prisma.StringNullableFilter<"ShiftApplication"> | string | null
+  status?: Prisma.StringFilter<"ShiftApplication"> | string
+  createdAt?: Prisma.DateTimeFilter<"ShiftApplication"> | Date | string
+}
+
+export type ShiftApplicationCreateWithoutShiftInput = {
+  id?: string
+  proposedRate?: number | null
+  isOutOfZoneOffer?: boolean
+  message?: string | null
+  status: string
+  createdAt?: Date | string
+  workerProfile: Prisma.WorkerProfileCreateNestedOneWithoutApplicationsInput
 }
 
 export type ShiftApplicationUncheckedCreateWithoutShiftInput = {
@@ -515,18 +619,44 @@ export type ShiftApplicationUpdateManyWithWhereWithoutShiftInput = {
   data: Prisma.XOR<Prisma.ShiftApplicationUpdateManyMutationInput, Prisma.ShiftApplicationUncheckedUpdateManyWithoutShiftInput>
 }
 
-export type ShiftApplicationScalarWhereInput = {
-  AND?: Prisma.ShiftApplicationScalarWhereInput | Prisma.ShiftApplicationScalarWhereInput[]
-  OR?: Prisma.ShiftApplicationScalarWhereInput[]
-  NOT?: Prisma.ShiftApplicationScalarWhereInput | Prisma.ShiftApplicationScalarWhereInput[]
-  id?: Prisma.StringFilter<"ShiftApplication"> | string
-  shiftId?: Prisma.StringFilter<"ShiftApplication"> | string
-  workerId?: Prisma.StringFilter<"ShiftApplication"> | string
-  proposedRate?: Prisma.FloatNullableFilter<"ShiftApplication"> | number | null
-  isOutOfZoneOffer?: Prisma.BoolFilter<"ShiftApplication"> | boolean
-  message?: Prisma.StringNullableFilter<"ShiftApplication"> | string | null
-  status?: Prisma.StringFilter<"ShiftApplication"> | string
-  createdAt?: Prisma.DateTimeFilter<"ShiftApplication"> | Date | string
+export type ShiftApplicationCreateManyWorkerProfileInput = {
+  id?: string
+  shiftId: string
+  proposedRate?: number | null
+  isOutOfZoneOffer?: boolean
+  message?: string | null
+  status: string
+  createdAt?: Date | string
+}
+
+export type ShiftApplicationUpdateWithoutWorkerProfileInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  proposedRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  isOutOfZoneOffer?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  message?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  shift?: Prisma.ShiftUpdateOneRequiredWithoutApplicationsNestedInput
+}
+
+export type ShiftApplicationUncheckedUpdateWithoutWorkerProfileInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  shiftId?: Prisma.StringFieldUpdateOperationsInput | string
+  proposedRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  isOutOfZoneOffer?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  message?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type ShiftApplicationUncheckedUpdateManyWithoutWorkerProfileInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  shiftId?: Prisma.StringFieldUpdateOperationsInput | string
+  proposedRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  isOutOfZoneOffer?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  message?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ShiftApplicationCreateManyShiftInput = {
@@ -541,12 +671,12 @@ export type ShiftApplicationCreateManyShiftInput = {
 
 export type ShiftApplicationUpdateWithoutShiftInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  workerId?: Prisma.StringFieldUpdateOperationsInput | string
   proposedRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   isOutOfZoneOffer?: Prisma.BoolFieldUpdateOperationsInput | boolean
   message?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  workerProfile?: Prisma.WorkerProfileUpdateOneRequiredWithoutApplicationsNestedInput
 }
 
 export type ShiftApplicationUncheckedUpdateWithoutShiftInput = {
@@ -581,6 +711,7 @@ export type ShiftApplicationSelect<ExtArgs extends runtime.Types.Extensions.Inte
   status?: boolean
   createdAt?: boolean
   shift?: boolean | Prisma.ShiftDefaultArgs<ExtArgs>
+  workerProfile?: boolean | Prisma.WorkerProfileDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["shiftApplication"]>
 
 export type ShiftApplicationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -593,6 +724,7 @@ export type ShiftApplicationSelectCreateManyAndReturn<ExtArgs extends runtime.Ty
   status?: boolean
   createdAt?: boolean
   shift?: boolean | Prisma.ShiftDefaultArgs<ExtArgs>
+  workerProfile?: boolean | Prisma.WorkerProfileDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["shiftApplication"]>
 
 export type ShiftApplicationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -605,6 +737,7 @@ export type ShiftApplicationSelectUpdateManyAndReturn<ExtArgs extends runtime.Ty
   status?: boolean
   createdAt?: boolean
   shift?: boolean | Prisma.ShiftDefaultArgs<ExtArgs>
+  workerProfile?: boolean | Prisma.WorkerProfileDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["shiftApplication"]>
 
 export type ShiftApplicationSelectScalar = {
@@ -621,18 +754,22 @@ export type ShiftApplicationSelectScalar = {
 export type ShiftApplicationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "shiftId" | "workerId" | "proposedRate" | "isOutOfZoneOffer" | "message" | "status" | "createdAt", ExtArgs["result"]["shiftApplication"]>
 export type ShiftApplicationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   shift?: boolean | Prisma.ShiftDefaultArgs<ExtArgs>
+  workerProfile?: boolean | Prisma.WorkerProfileDefaultArgs<ExtArgs>
 }
 export type ShiftApplicationIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   shift?: boolean | Prisma.ShiftDefaultArgs<ExtArgs>
+  workerProfile?: boolean | Prisma.WorkerProfileDefaultArgs<ExtArgs>
 }
 export type ShiftApplicationIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   shift?: boolean | Prisma.ShiftDefaultArgs<ExtArgs>
+  workerProfile?: boolean | Prisma.WorkerProfileDefaultArgs<ExtArgs>
 }
 
 export type $ShiftApplicationPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "ShiftApplication"
   objects: {
     shift: Prisma.$ShiftPayload<ExtArgs>
+    workerProfile: Prisma.$WorkerProfilePayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1038,6 +1175,7 @@ readonly fields: ShiftApplicationFieldRefs;
 export interface Prisma__ShiftApplicationClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   shift<T extends Prisma.ShiftDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ShiftDefaultArgs<ExtArgs>>): Prisma.Prisma__ShiftClient<runtime.Types.Result.GetResult<Prisma.$ShiftPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  workerProfile<T extends Prisma.WorkerProfileDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.WorkerProfileDefaultArgs<ExtArgs>>): Prisma.Prisma__WorkerProfileClient<runtime.Types.Result.GetResult<Prisma.$WorkerProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.

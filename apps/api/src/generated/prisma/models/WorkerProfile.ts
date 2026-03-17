@@ -9,8 +9,8 @@
  * 🟢 You can import this file directly.
  */
 import type * as runtime from "@prisma/client/runtime/client"
-import type * as $Enums from "../enums"
-import type * as Prisma from "../internal/prismaNamespace"
+import type * as $Enums from "../enums.ts"
+import type * as Prisma from "../internal/prismaNamespace.ts"
 
 /**
  * Model WorkerProfile
@@ -254,6 +254,7 @@ export type WorkerProfileWhereInput = {
   completedShiftsCount?: Prisma.IntFilter<"WorkerProfile"> | number
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   zones?: Prisma.WorkerZoneListRelationFilter
+  applications?: Prisma.ShiftApplicationListRelationFilter
 }
 
 export type WorkerProfileOrderByWithRelationInput = {
@@ -267,6 +268,7 @@ export type WorkerProfileOrderByWithRelationInput = {
   completedShiftsCount?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
   zones?: Prisma.WorkerZoneOrderByRelationAggregateInput
+  applications?: Prisma.ShiftApplicationOrderByRelationAggregateInput
 }
 
 export type WorkerProfileWhereUniqueInput = Prisma.AtLeast<{
@@ -283,6 +285,7 @@ export type WorkerProfileWhereUniqueInput = Prisma.AtLeast<{
   completedShiftsCount?: Prisma.IntFilter<"WorkerProfile"> | number
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   zones?: Prisma.WorkerZoneListRelationFilter
+  applications?: Prisma.ShiftApplicationListRelationFilter
 }, "id" | "userId">
 
 export type WorkerProfileOrderByWithAggregationInput = {
@@ -325,6 +328,7 @@ export type WorkerProfileCreateInput = {
   completedShiftsCount?: number
   user: Prisma.UserCreateNestedOneWithoutWorkerProfileInput
   zones?: Prisma.WorkerZoneCreateNestedManyWithoutWorkerProfileInput
+  applications?: Prisma.ShiftApplicationCreateNestedManyWithoutWorkerProfileInput
 }
 
 export type WorkerProfileUncheckedCreateInput = {
@@ -337,6 +341,7 @@ export type WorkerProfileUncheckedCreateInput = {
   rating?: number | null
   completedShiftsCount?: number
   zones?: Prisma.WorkerZoneUncheckedCreateNestedManyWithoutWorkerProfileInput
+  applications?: Prisma.ShiftApplicationUncheckedCreateNestedManyWithoutWorkerProfileInput
 }
 
 export type WorkerProfileUpdateInput = {
@@ -349,6 +354,7 @@ export type WorkerProfileUpdateInput = {
   completedShiftsCount?: Prisma.IntFieldUpdateOperationsInput | number
   user?: Prisma.UserUpdateOneRequiredWithoutWorkerProfileNestedInput
   zones?: Prisma.WorkerZoneUpdateManyWithoutWorkerProfileNestedInput
+  applications?: Prisma.ShiftApplicationUpdateManyWithoutWorkerProfileNestedInput
 }
 
 export type WorkerProfileUncheckedUpdateInput = {
@@ -361,6 +367,7 @@ export type WorkerProfileUncheckedUpdateInput = {
   rating?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   completedShiftsCount?: Prisma.IntFieldUpdateOperationsInput | number
   zones?: Prisma.WorkerZoneUncheckedUpdateManyWithoutWorkerProfileNestedInput
+  applications?: Prisma.ShiftApplicationUncheckedUpdateManyWithoutWorkerProfileNestedInput
 }
 
 export type WorkerProfileCreateManyInput = {
@@ -506,6 +513,20 @@ export type WorkerProfileUpdateOneRequiredWithoutZonesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.WorkerProfileUpdateToOneWithWhereWithoutZonesInput, Prisma.WorkerProfileUpdateWithoutZonesInput>, Prisma.WorkerProfileUncheckedUpdateWithoutZonesInput>
 }
 
+export type WorkerProfileCreateNestedOneWithoutApplicationsInput = {
+  create?: Prisma.XOR<Prisma.WorkerProfileCreateWithoutApplicationsInput, Prisma.WorkerProfileUncheckedCreateWithoutApplicationsInput>
+  connectOrCreate?: Prisma.WorkerProfileCreateOrConnectWithoutApplicationsInput
+  connect?: Prisma.WorkerProfileWhereUniqueInput
+}
+
+export type WorkerProfileUpdateOneRequiredWithoutApplicationsNestedInput = {
+  create?: Prisma.XOR<Prisma.WorkerProfileCreateWithoutApplicationsInput, Prisma.WorkerProfileUncheckedCreateWithoutApplicationsInput>
+  connectOrCreate?: Prisma.WorkerProfileCreateOrConnectWithoutApplicationsInput
+  upsert?: Prisma.WorkerProfileUpsertWithoutApplicationsInput
+  connect?: Prisma.WorkerProfileWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.WorkerProfileUpdateToOneWithWhereWithoutApplicationsInput, Prisma.WorkerProfileUpdateWithoutApplicationsInput>, Prisma.WorkerProfileUncheckedUpdateWithoutApplicationsInput>
+}
+
 export type WorkerProfileCreateWithoutUserInput = {
   id?: string
   city: string
@@ -515,6 +536,7 @@ export type WorkerProfileCreateWithoutUserInput = {
   rating?: number | null
   completedShiftsCount?: number
   zones?: Prisma.WorkerZoneCreateNestedManyWithoutWorkerProfileInput
+  applications?: Prisma.ShiftApplicationCreateNestedManyWithoutWorkerProfileInput
 }
 
 export type WorkerProfileUncheckedCreateWithoutUserInput = {
@@ -526,6 +548,7 @@ export type WorkerProfileUncheckedCreateWithoutUserInput = {
   rating?: number | null
   completedShiftsCount?: number
   zones?: Prisma.WorkerZoneUncheckedCreateNestedManyWithoutWorkerProfileInput
+  applications?: Prisma.ShiftApplicationUncheckedCreateNestedManyWithoutWorkerProfileInput
 }
 
 export type WorkerProfileCreateOrConnectWithoutUserInput = {
@@ -553,6 +576,7 @@ export type WorkerProfileUpdateWithoutUserInput = {
   rating?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   completedShiftsCount?: Prisma.IntFieldUpdateOperationsInput | number
   zones?: Prisma.WorkerZoneUpdateManyWithoutWorkerProfileNestedInput
+  applications?: Prisma.ShiftApplicationUpdateManyWithoutWorkerProfileNestedInput
 }
 
 export type WorkerProfileUncheckedUpdateWithoutUserInput = {
@@ -564,6 +588,7 @@ export type WorkerProfileUncheckedUpdateWithoutUserInput = {
   rating?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   completedShiftsCount?: Prisma.IntFieldUpdateOperationsInput | number
   zones?: Prisma.WorkerZoneUncheckedUpdateManyWithoutWorkerProfileNestedInput
+  applications?: Prisma.ShiftApplicationUncheckedUpdateManyWithoutWorkerProfileNestedInput
 }
 
 export type WorkerProfileCreateWithoutZonesInput = {
@@ -575,6 +600,7 @@ export type WorkerProfileCreateWithoutZonesInput = {
   rating?: number | null
   completedShiftsCount?: number
   user: Prisma.UserCreateNestedOneWithoutWorkerProfileInput
+  applications?: Prisma.ShiftApplicationCreateNestedManyWithoutWorkerProfileInput
 }
 
 export type WorkerProfileUncheckedCreateWithoutZonesInput = {
@@ -586,6 +612,7 @@ export type WorkerProfileUncheckedCreateWithoutZonesInput = {
   reliabilityScore?: number
   rating?: number | null
   completedShiftsCount?: number
+  applications?: Prisma.ShiftApplicationUncheckedCreateNestedManyWithoutWorkerProfileInput
 }
 
 export type WorkerProfileCreateOrConnectWithoutZonesInput = {
@@ -613,6 +640,7 @@ export type WorkerProfileUpdateWithoutZonesInput = {
   rating?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   completedShiftsCount?: Prisma.IntFieldUpdateOperationsInput | number
   user?: Prisma.UserUpdateOneRequiredWithoutWorkerProfileNestedInput
+  applications?: Prisma.ShiftApplicationUpdateManyWithoutWorkerProfileNestedInput
 }
 
 export type WorkerProfileUncheckedUpdateWithoutZonesInput = {
@@ -624,6 +652,71 @@ export type WorkerProfileUncheckedUpdateWithoutZonesInput = {
   reliabilityScore?: Prisma.IntFieldUpdateOperationsInput | number
   rating?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   completedShiftsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  applications?: Prisma.ShiftApplicationUncheckedUpdateManyWithoutWorkerProfileNestedInput
+}
+
+export type WorkerProfileCreateWithoutApplicationsInput = {
+  id?: string
+  city: string
+  expectedRate?: number | null
+  verificationStatus: string
+  reliabilityScore?: number
+  rating?: number | null
+  completedShiftsCount?: number
+  user: Prisma.UserCreateNestedOneWithoutWorkerProfileInput
+  zones?: Prisma.WorkerZoneCreateNestedManyWithoutWorkerProfileInput
+}
+
+export type WorkerProfileUncheckedCreateWithoutApplicationsInput = {
+  id?: string
+  userId: string
+  city: string
+  expectedRate?: number | null
+  verificationStatus: string
+  reliabilityScore?: number
+  rating?: number | null
+  completedShiftsCount?: number
+  zones?: Prisma.WorkerZoneUncheckedCreateNestedManyWithoutWorkerProfileInput
+}
+
+export type WorkerProfileCreateOrConnectWithoutApplicationsInput = {
+  where: Prisma.WorkerProfileWhereUniqueInput
+  create: Prisma.XOR<Prisma.WorkerProfileCreateWithoutApplicationsInput, Prisma.WorkerProfileUncheckedCreateWithoutApplicationsInput>
+}
+
+export type WorkerProfileUpsertWithoutApplicationsInput = {
+  update: Prisma.XOR<Prisma.WorkerProfileUpdateWithoutApplicationsInput, Prisma.WorkerProfileUncheckedUpdateWithoutApplicationsInput>
+  create: Prisma.XOR<Prisma.WorkerProfileCreateWithoutApplicationsInput, Prisma.WorkerProfileUncheckedCreateWithoutApplicationsInput>
+  where?: Prisma.WorkerProfileWhereInput
+}
+
+export type WorkerProfileUpdateToOneWithWhereWithoutApplicationsInput = {
+  where?: Prisma.WorkerProfileWhereInput
+  data: Prisma.XOR<Prisma.WorkerProfileUpdateWithoutApplicationsInput, Prisma.WorkerProfileUncheckedUpdateWithoutApplicationsInput>
+}
+
+export type WorkerProfileUpdateWithoutApplicationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  city?: Prisma.StringFieldUpdateOperationsInput | string
+  expectedRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  verificationStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  reliabilityScore?: Prisma.IntFieldUpdateOperationsInput | number
+  rating?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  completedShiftsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  user?: Prisma.UserUpdateOneRequiredWithoutWorkerProfileNestedInput
+  zones?: Prisma.WorkerZoneUpdateManyWithoutWorkerProfileNestedInput
+}
+
+export type WorkerProfileUncheckedUpdateWithoutApplicationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  city?: Prisma.StringFieldUpdateOperationsInput | string
+  expectedRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  verificationStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  reliabilityScore?: Prisma.IntFieldUpdateOperationsInput | number
+  rating?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  completedShiftsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  zones?: Prisma.WorkerZoneUncheckedUpdateManyWithoutWorkerProfileNestedInput
 }
 
 
@@ -633,10 +726,12 @@ export type WorkerProfileUncheckedUpdateWithoutZonesInput = {
 
 export type WorkerProfileCountOutputType = {
   zones: number
+  applications: number
 }
 
 export type WorkerProfileCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   zones?: boolean | WorkerProfileCountOutputTypeCountZonesArgs
+  applications?: boolean | WorkerProfileCountOutputTypeCountApplicationsArgs
 }
 
 /**
@@ -656,6 +751,13 @@ export type WorkerProfileCountOutputTypeCountZonesArgs<ExtArgs extends runtime.T
   where?: Prisma.WorkerZoneWhereInput
 }
 
+/**
+ * WorkerProfileCountOutputType without action
+ */
+export type WorkerProfileCountOutputTypeCountApplicationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ShiftApplicationWhereInput
+}
+
 
 export type WorkerProfileSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -668,6 +770,7 @@ export type WorkerProfileSelect<ExtArgs extends runtime.Types.Extensions.Interna
   completedShiftsCount?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   zones?: boolean | Prisma.WorkerProfile$zonesArgs<ExtArgs>
+  applications?: boolean | Prisma.WorkerProfile$applicationsArgs<ExtArgs>
   _count?: boolean | Prisma.WorkerProfileCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["workerProfile"]>
 
@@ -710,6 +813,7 @@ export type WorkerProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalA
 export type WorkerProfileInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   zones?: boolean | Prisma.WorkerProfile$zonesArgs<ExtArgs>
+  applications?: boolean | Prisma.WorkerProfile$applicationsArgs<ExtArgs>
   _count?: boolean | Prisma.WorkerProfileCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type WorkerProfileIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -724,6 +828,7 @@ export type $WorkerProfilePayload<ExtArgs extends runtime.Types.Extensions.Inter
   objects: {
     user: Prisma.$UserPayload<ExtArgs>
     zones: Prisma.$WorkerZonePayload<ExtArgs>[]
+    applications: Prisma.$ShiftApplicationPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1130,6 +1235,7 @@ export interface Prisma__WorkerProfileClient<T, Null = never, ExtArgs extends ru
   readonly [Symbol.toStringTag]: "PrismaPromise"
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   zones<T extends Prisma.WorkerProfile$zonesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.WorkerProfile$zonesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WorkerZonePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  applications<T extends Prisma.WorkerProfile$applicationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.WorkerProfile$applicationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ShiftApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1589,6 +1695,30 @@ export type WorkerProfile$zonesArgs<ExtArgs extends runtime.Types.Extensions.Int
   take?: number
   skip?: number
   distinct?: Prisma.WorkerZoneScalarFieldEnum | Prisma.WorkerZoneScalarFieldEnum[]
+}
+
+/**
+ * WorkerProfile.applications
+ */
+export type WorkerProfile$applicationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ShiftApplication
+   */
+  select?: Prisma.ShiftApplicationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ShiftApplication
+   */
+  omit?: Prisma.ShiftApplicationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ShiftApplicationInclude<ExtArgs> | null
+  where?: Prisma.ShiftApplicationWhereInput
+  orderBy?: Prisma.ShiftApplicationOrderByWithRelationInput | Prisma.ShiftApplicationOrderByWithRelationInput[]
+  cursor?: Prisma.ShiftApplicationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ShiftApplicationScalarFieldEnum | Prisma.ShiftApplicationScalarFieldEnum[]
 }
 
 /**

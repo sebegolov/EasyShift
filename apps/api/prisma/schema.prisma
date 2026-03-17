@@ -65,16 +65,17 @@ model OwnerSubscription {
 }
 
 model WorkerProfile {
-  id                   String       @id @default(cuid())
-  userId               String       @unique
+  id                   String             @id @default(cuid())
+  userId               String             @unique
   city                 String
   expectedRate         Float?
   verificationStatus   String
-  reliabilityScore     Int          @default(50)
+  reliabilityScore     Int                @default(50)
   rating               Float?
-  completedShiftsCount Int          @default(0)
-  user                 User         @relation(fields: [userId], references: [id])
+  completedShiftsCount Int                @default(0)
+  user                 User               @relation(fields: [userId], references: [id])
   zones                WorkerZone[]
+  applications         ShiftApplication[]
 }
 
 model WorkerZone {
@@ -128,15 +129,16 @@ model Shift {
 }
 
 model ShiftApplication {
-  id               String   @id @default(cuid())
+  id               String         @id @default(cuid())
   shiftId          String
   workerId         String
   proposedRate     Float?
-  isOutOfZoneOffer Boolean  @default(false)
+  isOutOfZoneOffer Boolean        @default(false)
   message          String?
   status           String
-  createdAt        DateTime @default(now())
-  shift            Shift    @relation(fields: [shiftId], references: [id])
+  createdAt        DateTime       @default(now())
+  shift            Shift          @relation(fields: [shiftId], references: [id])
+  workerProfile    WorkerProfile  @relation(fields: [workerId], references: [id])
 }
 
 model ShiftAssignment {
