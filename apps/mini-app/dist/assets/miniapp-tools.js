@@ -207,7 +207,7 @@
         <span class="es-top-bar-label">EasyShift</span>
         <div class="es-top-bar-actions">
           <span class="es-top-link" role="button" tabindex="0" data-open-account="true">Аккаунт</span>
-          <span class="es-top-link es-top-link-admin" role="button" tabindex="0" data-open-admin="true" style="display:none">Dev Admin</span>
+          <span class="es-top-link es-top-link-admin" role="button" tabindex="0" data-open-admin="true">Dev Admin</span>
         </div>
       </div>
     `;
@@ -215,10 +215,7 @@
   }
 
   function updateDeveloperButton() {
-    const button = document.querySelector('#es-account-admin-bar [data-open-admin="true"]');
-    if (button) {
-      button.style.display = state.isDeveloper ? 'inline-block' : 'none';
-    }
+    // Кнопка Dev Admin теперь показывается всегда, доступ всё равно проверяет backend.
   }
 
   function renderAdminShell() {
