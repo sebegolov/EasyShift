@@ -35,9 +35,10 @@
   }
 
   async function request(path, options = {}) {
+    const hasBody = options.body != null && options.body !== '';
     const response = await fetch(`${apiBaseUrl}${path}`, {
       headers: {
-        'Content-Type': 'application/json',
+        ...(hasBody ? { 'Content-Type': 'application/json' } : {}),
         ...(options.headers ?? {}),
       },
       ...options,
