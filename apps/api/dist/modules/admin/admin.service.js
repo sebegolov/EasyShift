@@ -282,7 +282,7 @@ let AdminService = class AdminService {
     }
     async deleteUser(telegramId, userId) {
         this.ensureDeveloperAccess(telegramId);
-        return this.usersService.deleteAccount({ userId });
+        return this.usersService.hardDeleteUser(userId);
     }
 };
 exports.AdminService = AdminService;
