@@ -1,0 +1,36 @@
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Build outputs
+dist/
+apps/*/dist/
+packages/*/dist/
+deploy/*.tgz
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+
+# Logs
+logs/
+*.log
+logs/**/*.log
+
+# OS / editor junk
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.idea/
+.vscode/
+
+# Prisma
+prisma/migrations/
+
+# PM2 ecosystem files with secrets (keep only templates)
+ecosystem.config.js
+

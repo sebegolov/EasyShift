@@ -1,0 +1,186 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id            String         @id @default(cuid())
+  phone         String?        @unique
+  telegramId    String?        @unique
+  fullName      String
+  role          String
+  status        String
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  ownerProfile  OwnerProfile?
+  workerProfile WorkerProfile?
+}
+
+model OwnerProfile {
+  id            String              @id @default(cuid())
+  userId        String              @unique
+  companyName   String?
+  contactName   String
+  contactPhone  String
+  user          User                @relation(fields: [userId], references: [id])
+  pvzItems      PVZ[]
+  subscriptions OwnerSubscription[]
+}
+
+model SubscriptionPlan {
+  id            String              @id @default(cuid())
+  code          String
+  name          String
+  version       Int
+  pvzLimit      Int
+  status        String
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+  subscriptions OwnerSubscription[]
+
+  @@unique([code, version])
+}
+
+model OwnerSubscription {
+  id          String            @id @default(cuid())
+  ownerId     String
+  planId      String?
+  planCode    String
+  planName    String
+  planVersion Int
+  pvzLimit    Int
+  snapshot    Json
+  source      String
+  status      String
+  startsAt    DateTime          @default(now())
+  endsAt      DateTime?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+  owner       OwnerProfile      @relation(fields: [ownerId], references: [id])
+  plan        SubscriptionPlan? @relation(fields: [planId], references: [id])
+}
+
+model WorkerProfile {
+  id                   String       @id @default(cuid())
+  userId               String       @unique
+  city                 String
+  expectedRate         Float?
+  verificationStatus   String
+  reliabilityScore     Int          @default(50)
+  rating               Float?
+  completedShiftsCount Int          @default(0)
+  user                 User         @relation(fields: [userId], references: [id])
+  zones                WorkerZone[]
+}
+
+model WorkerZone {
+  id              String        @id @default(cuid())
+  workerProfileId String
+  label           String
+  centerLat       Float
+  centerLng       Float
+  radiusKm        Float
+  preferredRate   Float?
+  color           String        @default("#5f7cff")
+  isActive        Boolean       @default(true)
+  createdAt       DateTime      @default(now())
+  workerProfile   WorkerProfile @relation(fields: [workerProfileId], references: [id])
+}
+
+model PVZ {
+  id           String       @id @default(cuid())
+  ownerId      String
+  title        String
+  address      String
+  city         String
+  lat          Float
+  lng          Float
+  workingHours String?
+  requirements String?
+  status       String
+  owner        OwnerProfile @relation(fields: [ownerId], references: [id])
+  shifts       Shift[]
+}
+
+model Shift {
+  id                     String             @id @default(cuid())
+  pvzId                  String
+  ownerId                String
+  title                  String
+  description            String?
+  startAt                DateTime
+  endAt                  DateTime
+  responseDeadlineAt     DateTime?
+  confirmationDeadlineAt DateTime?
+  baseRate               Float
+  currency               String
+  urgencyLevel           String
+  status                 String
+  pvz                    PVZ                @relation(fields: [pvzId], references: [id])
+  applications           ShiftApplication[]
+  assignment             ShiftAssignment?
+  attendance             Attendance?
+  incidents              Incident[]
+}
+
+model ShiftApplication {
+  id               String   @id @default(cuid())
+  shiftId          String
+  workerId         String
+  proposedRate     Float?
+  isOutOfZoneOffer Boolean  @default(false)
+  message          String?
+  status           String
+  createdAt        DateTime @default(now())
+  shift            Shift    @relation(fields: [shiftId], references: [id])
+}
+
+model ShiftAssignment {
+  id               String   @id @default(cuid())
+  shiftId          String   @unique
+  workerId         String
+  applicationId    String
+  agreedRate       Float
+  platformFee      Float
+  settlementStatus String
+  status           String
+  assignedAt       DateTime @default(now())
+  shift            Shift    @relation(fields: [shiftId], references: [id])
+}
+
+model Attendance {
+  id                  String    @id @default(cuid())
+  shiftId             String    @unique
+  workerId            String
+  checkInAt           DateTime?
+  checkOutAt          DateTime?
+  ownerConfirmedAt    DateTime?
+  operatorConfirmedAt DateTime?
+  shift               Shift     @relation(fields: [shiftId], references: [id])
+}
+
+model Incident {
+  id          String   @id @default(cuid())
+  shiftId     String
+  workerId    String?
+  ownerId     String?
+  type        String
+  status      String
+  description String?
+  createdAt   DateTime @default(now())
+  shift       Shift    @relation(fields: [shiftId], references: [id])
+}
+
+model NotificationEvent {
+  id        String   @id @default(cuid())
+  userId    String
+  channel   String
+  eventType String
+  payload   Json
+  status    String
+  createdAt DateTime @default(now())
+}
