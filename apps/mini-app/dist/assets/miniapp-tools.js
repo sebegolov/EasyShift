@@ -292,13 +292,13 @@
       return;
     }
     const rows = state.users.map((user) => `
-      <tr>
+      <tr class="es-user-row" role="button" tabindex="0" data-open-user="${user.id}">
         <td>${escapeHtml(user.fullName)}</td>
         <td>${escapeHtml(user.role)}</td>
         <td>${escapeHtml(user.status)}</td>
         <td>${escapeHtml(user.telegramId || '—')}</td>
         <td>${escapeHtml(user.phone || '—')}</td>
-        <td><button type="button" class="ghost compact" data-open-user="${user.id}">Открыть</button></td>
+        <td><span class="es-open-label">Открыть</span></td>
       </tr>
     `).join('');
     node.innerHTML = `
@@ -510,6 +510,12 @@
     if (!(target instanceof HTMLElement)) {
       return;
     }
+    const openUserEl = target.closest('[data-open-user]');
+    if (openUserEl?.dataset.openUser) {
+      await loadUserDetail(openUserEl.dataset.openUser);
+      renderUserDetail();
+      return;
+    }
     if (target.dataset.closeOverlay) {
       closeOverlay();
       return;
@@ -555,11 +561,6 @@
       state.userPage = Math.max(state.userPage, 1);
       await loadUsers();
       renderUsers();
-      return;
-    }
-    if (target.dataset.openUser) {
-      await loadUserDetail(target.dataset.openUser);
-      renderUserDetail();
       return;
     }
     if (target.dataset.trustWorker) {
