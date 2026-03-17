@@ -191,10 +191,37 @@
     `;
   }
 
-  function ensureFloatingButtons() {
-    // In Telegram WebApp the extra floating/header buttons visually conflict
-    // with the host UI, so we disable automatic injection here.
-    return;
+  function injectTopAccountBar() {
+    if (document.getElementById('es-account-admin-bar')) {
+      return;
+    }
+    const rootShell = document.querySelector('.app-shell') || root?.parentElement || document.body;
+    if (!rootShell) {
+      return;
+    }
+    const sourceButtons = Array.from(document.querySelectorAll('button')).filter((btn) => {
+      const text = (btn.textContent || '').trim().toLowerCase();
+      return text === 'аккаунт' || text === 'dev admin';
+    });
+    if (!sourceButtons.length) {
+      return;
+    }
+    const bar = document.createElement('div');
+    bar.id = 'es-account-admin-bar';
+    bar.className = 'miniapp-tools-launchers';
+    bar.innerHTML = `
+      <div class="miniapp-tools-launchers-inner">
+        <span class="miniapp-tools-launchers-label">EasyShift</span>
+        <div class="miniapp-tools-launchers-actions"></div>
+      </div>
+    `;
+    const actionsHost = bar.querySelector('.miniapp-tools-launchers-actions');
+    sourceButtons.forEach((btn) => {
+      const clone = btn.cloneNode(true);
+      actionsHost?.appendChild(clone);
+      btn.style.display = 'none';
+    });
+    rootShell.parentElement?.insertBefore(bar, rootShell);
   }
 
   function updateDeveloperButton() {
@@ -589,7 +616,7 @@
   async function bootstrap() {
     tg?.ready?.();
     tg?.expand?.();
-    ensureFloatingButtons();
+    setTimeout(injectTopAccountBar, 300);
     document.body.addEventListener('click', (event) => {
       void handleBodyClick(event);
     });
