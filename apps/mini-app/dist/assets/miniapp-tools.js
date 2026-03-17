@@ -392,11 +392,10 @@
         </div>
       </div>
       ${renderDependencySummary(detail.user)}
-      ${detail.user.workerProfile ? `
-        <div class="miniapp-tools-actions">
-          <button type="button" class="primary compact" data-trust-worker="${detail.user.workerProfile.id}">Сделать trusted_worker</button>
-        </div>
-      ` : ''}
+      <div class="miniapp-tools-actions">
+        ${detail.user.workerProfile ? `<button type="button" class="primary compact" data-trust-worker="${detail.user.workerProfile.id}">Сделать trusted_worker</button>` : ''}
+        <button type="button" class="miniapp-tools-danger compact" data-admin-delete-user="${detail.user.id}">Удалить пользователя</button>
+      </div>
     `;
   }
 
@@ -581,6 +580,23 @@
       });
       await loadIncidents();
       renderIncidents();
+      return;
+    }
+    if (target.dataset.adminDeleteUser) {
+      const userId = target.dataset.adminDeleteUser;
+      if (!window.confirm('Удалить этого пользователя? Аккаунт будет анонимизирован. Действие возможно только если нет активных зависимостей (ПВЗ, смены, зоны, отклики и т.д.).')) {
+        return;
+      }
+      try {
+        await request(`/admin/users/${encodeURIComponent(userId)}?telegramId=${encodeURIComponent(telegramId)}`, { method: 'DELETE' });
+        alert('Пользователь удалён.');
+        state.userDetail = null;
+        await loadUsers();
+        renderUsers();
+        renderUserDetail();
+      } catch (err) {
+        alert(err.payload?.message || err.message || 'Не удалось удалить.');
+      }
     }
   }
 
