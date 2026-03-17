@@ -9,7 +9,7 @@ function buildMiniAppUrl(miniAppUrl, extraQuery) {
         return '';
     }
     const hasQuery = miniAppUrl.includes('?');
-    const base = `${miniAppUrl}${hasQuery ? '&' : '?'}v=20260317`;
+    const base = `${miniAppUrl}${hasQuery ? '&' : '?'}v=20260318`;
     if (!extraQuery) {
         return base;
     }
