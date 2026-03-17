@@ -291,8 +291,11 @@
     if (!node) {
       return;
     }
-    const rows = state.users.map((user) => `
-      <tr class="es-user-row" role="button" tabindex="0" data-open-user="${user.id}">
+    const selectedId = state.userDetail?.user?.id;
+    const rows = state.users.map((user) => {
+      const selected = selectedId === user.id ? ' es-user-row-selected' : '';
+      return `
+      <tr class="es-user-row${selected}" role="button" tabindex="0" data-open-user="${user.id}">
         <td>${escapeHtml(user.fullName)}</td>
         <td>${escapeHtml(user.role)}</td>
         <td>${escapeHtml(user.status)}</td>
@@ -300,7 +303,8 @@
         <td>${escapeHtml(user.phone || '—')}</td>
         <td><span class="es-open-label">Открыть</span></td>
       </tr>
-    `).join('');
+    `;
+    }).join('');
     node.innerHTML = `
       <div class="step-header">
         <div>
@@ -513,6 +517,7 @@
     const openUserEl = target.closest('[data-open-user]');
     if (openUserEl?.dataset.openUser) {
       await loadUserDetail(openUserEl.dataset.openUser);
+      renderUsers();
       renderUserDetail();
       return;
     }
@@ -563,25 +568,29 @@
       renderUsers();
       return;
     }
-    if (target.dataset.trustWorker) {
-      await request(`/admin/workers/${encodeURIComponent(target.dataset.trustWorker)}/trust?telegramId=${encodeURIComponent(telegramId)}`, {
+    const trustEl = target.closest('[data-trust-worker]');
+    if (trustEl?.dataset.trustWorker) {
+      await request(`/admin/workers/${encodeURIComponent(trustEl.dataset.trustWorker)}/trust?telegramId=${encodeURIComponent(telegramId)}`, {
         method: 'POST',
       });
       alert('Работник отмечен как trusted_worker.');
       await loadUserDetail(state.userDetail.user.id);
+      renderUsers();
       renderUserDetail();
       return;
     }
-    if (target.dataset.resolveIncident) {
-      await request(`/admin/incidents/${encodeURIComponent(target.dataset.resolveIncident)}/resolve?telegramId=${encodeURIComponent(telegramId)}`, {
+    const resolveEl = target.closest('[data-resolve-incident]');
+    if (resolveEl?.dataset.resolveIncident) {
+      await request(`/admin/incidents/${encodeURIComponent(resolveEl.dataset.resolveIncident)}/resolve?telegramId=${encodeURIComponent(telegramId)}`, {
         method: 'POST',
       });
       await loadIncidents();
       renderIncidents();
       return;
     }
-    if (target.dataset.adminDeleteUser) {
-      const userId = target.dataset.adminDeleteUser;
+    const deleteUserEl = target.closest('[data-admin-delete-user]');
+    if (deleteUserEl?.dataset.adminDeleteUser) {
+      const userId = deleteUserEl.dataset.adminDeleteUser;
       if (!window.confirm('Удалить этого пользователя? Аккаунт будет анонимизирован. Действие возможно только если нет активных зависимостей (ПВЗ, смены, зоны, отклики и т.д.).')) {
         return;
       }
@@ -595,6 +604,7 @@
       } catch (err) {
         alert(err.payload?.message || err.message || 'Не удалось удалить.');
       }
+      return;
     }
   }
 
