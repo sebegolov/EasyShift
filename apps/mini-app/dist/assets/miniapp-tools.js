@@ -199,35 +199,47 @@
     if (!rootShell) {
       return;
     }
-    const sourceButtons = Array.from(document.querySelectorAll('button')).filter((btn) => {
+    // Скрыть родные кнопки «Аккаунт» и «Dev Admin» — на мобильном они отображаются криво
+    Array.from(document.querySelectorAll('button')).forEach((btn) => {
       const text = (btn.textContent || '').trim().toLowerCase();
-      return text === 'аккаунт' || text === 'dev admin';
+      if (text === 'аккаунт' || text === 'dev admin') {
+        btn.style.setProperty('display', 'none', 'important');
+        btn.setAttribute('aria-hidden', 'true');
+      }
     });
-    if (!sourceButtons.length) {
-      return;
-    }
+    // Своя верхняя полоса: обычные кликабельные span (не button), в стиле приложения
     const bar = document.createElement('div');
     bar.id = 'es-account-admin-bar';
-    bar.className = 'miniapp-tools-launchers';
+    bar.className = 'es-top-bar';
     bar.innerHTML = `
-      <div class="miniapp-tools-launchers-inner">
-        <span class="miniapp-tools-launchers-label">EasyShift</span>
-        <div class="miniapp-tools-launchers-actions"></div>
+      <div class="es-top-bar-inner">
+        <span class="es-top-bar-label">EasyShift</span>
+        <div class="es-top-bar-actions">
+          <span class="es-top-link" role="button" tabindex="0" data-open-account="true">Аккаунт</span>
+          <span class="es-top-link es-top-link-admin" role="button" tabindex="0" data-open-admin="true" style="display:none">Dev Admin</span>
+        </div>
       </div>
     `;
-    const actionsHost = bar.querySelector('.miniapp-tools-launchers-actions');
-    sourceButtons.forEach((btn) => {
-      const clone = btn.cloneNode(true);
-      actionsHost?.appendChild(clone);
-      btn.style.display = 'none';
-    });
     rootShell.parentElement?.insertBefore(bar, rootShell);
+    // Повторно скрыть родные кнопки, если React добавит их позже
+    setTimeout(hideNativeAccountButtons, 800);
+    setTimeout(hideNativeAccountButtons, 2000);
+  }
+
+  function hideNativeAccountButtons() {
+    Array.from(document.querySelectorAll('button')).forEach((btn) => {
+      const text = (btn.textContent || '').trim().toLowerCase();
+      if (text === 'аккаунт' || text === 'dev admin') {
+        btn.style.setProperty('display', 'none', 'important');
+        btn.setAttribute('aria-hidden', 'true');
+      }
+    });
   }
 
   function updateDeveloperButton() {
-    const button = document.querySelector('[data-open-admin="true"]');
+    const button = document.querySelector('#es-account-admin-bar [data-open-admin="true"]');
     if (button) {
-      button.style.display = state.isDeveloper ? 'inline-flex' : 'none';
+      button.style.display = state.isDeveloper ? 'inline-block' : 'none';
     }
   }
 
