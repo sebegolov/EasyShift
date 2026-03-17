@@ -199,15 +199,6 @@
     if (!rootShell) {
       return;
     }
-    // Скрыть родные кнопки «Аккаунт» и «Dev Admin» — на мобильном они отображаются криво
-    Array.from(document.querySelectorAll('button')).forEach((btn) => {
-      const text = (btn.textContent || '').trim().toLowerCase();
-      if (text === 'аккаунт' || text === 'dev admin') {
-        btn.style.setProperty('display', 'none', 'important');
-        btn.setAttribute('aria-hidden', 'true');
-      }
-    });
-    // Своя верхняя полоса: обычные кликабельные span (не button), в стиле приложения
     const bar = document.createElement('div');
     bar.id = 'es-account-admin-bar';
     bar.className = 'es-top-bar';
@@ -221,19 +212,6 @@
       </div>
     `;
     rootShell.parentElement?.insertBefore(bar, rootShell);
-    // Повторно скрыть родные кнопки, если React добавит их позже
-    setTimeout(hideNativeAccountButtons, 800);
-    setTimeout(hideNativeAccountButtons, 2000);
-  }
-
-  function hideNativeAccountButtons() {
-    Array.from(document.querySelectorAll('button')).forEach((btn) => {
-      const text = (btn.textContent || '').trim().toLowerCase();
-      if (text === 'аккаунт' || text === 'dev admin') {
-        btn.style.setProperty('display', 'none', 'important');
-        btn.setAttribute('aria-hidden', 'true');
-      }
-    });
   }
 
   function updateDeveloperButton() {
