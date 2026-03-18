@@ -115,7 +115,7 @@ function buildAccountKeyboard(miniAppUrl) {
     }
     return telegraf_1.Markup.inlineKeyboard([
         [
-            telegraf_1.Markup.button.webApp(messages_1.messages.openMiniApp, buildMiniAppUrl(miniAppUrl, 'screen=account&from=account')),
+            telegraf_1.Markup.button.webApp(messages_1.messages.openMiniApp, buildMiniAppUrl(miniAppUrl, 'openAccount=1&from=account')),
         ],
     ]);
 }

@@ -10,7 +10,7 @@ function AccountCornerButton() {
   const navigate = useNavigate();
   return (
     <div className="account-corner">
-      <button className="account-corner-btn" onClick={() => navigate('/account?from=account')}>
+      <button className="account-corner-btn" onClick={() => navigate('/account?openAccount=1')}>
         Аккаунт
       </button>
     </div>
@@ -21,10 +21,7 @@ function WantsAccountFromUrl() {
   const { search } = useLocation();
   return useMemo(() => {
     const sp = new URLSearchParams(search);
-    const screen = sp.get('screen');
-    const legacySettings = sp.get('settings');
-    const from = sp.get('from');
-    return (screen === 'account' || legacySettings === 'account') && from === 'account';
+    return sp.get('openAccount') === '1';
   }, [search]);
 }
 
@@ -64,11 +61,7 @@ function DebugBanner() {
 
 function Start({ user, refreshUser }: { user: UserMe; refreshUser: () => Promise<void> }) {
   const sp = new URLSearchParams(window.location.search);
-  const screen = sp.get('screen');
-  const settings = sp.get('settings');
-  const from = sp.get('from');
-
-  const wantsAccount = (screen === 'account' || settings === 'account') && from === 'account';
+  const wantsAccount = sp.get('openAccount') === '1';
   if (wantsAccount) {
     return <Navigate to="/account" replace />;
   }
