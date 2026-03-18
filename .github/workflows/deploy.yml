@@ -31,12 +31,15 @@ jobs:
             cd /srv/easyshift/current
 
             # Git может ругаться на "dubious ownership" из-за отличий владельца каталога.
-            # Добавляем папку в safe.directory, чтобы deploy не падал.
-            git config --global --add safe.directory /srv/easyshift/current || true
+            # Делаем проверку safe.directory максимально надёжной:
+            # 1) задаём writable место под глобальный gitconfig
+            # 2) дополнительно прокидываем safe.directory через -c при fetch/reset
+            export GIT_CONFIG_GLOBAL=/tmp/gitconfig
+            git -c safe.directory=/srv/easyshift/current config --global --add safe.directory /srv/easyshift/current || true
 
             # Обновить код из GitHub (репозиторий должен быть уже настроен на сервере)
-            git fetch origin main
-            git reset --hard origin/main
+            git -c safe.directory=/srv/easyshift/current fetch origin main
+            git -c safe.directory=/srv/easyshift/current reset --hard origin/main
 
             # Обновить зависимости при необходимости
             if [ -f package-lock.json ]; then
