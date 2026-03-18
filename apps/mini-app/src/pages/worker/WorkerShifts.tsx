@@ -44,6 +44,14 @@ export function WorkerShifts({ workerId, userId }: { workerId: string; userId: s
     <div>
       <h2>Меню работника</h2>
 
+      <div className="card" style={{ marginTop: 12 }}>
+        <h3>Зона работы</h3>
+        <p className="muted">Настройте радиус/центр, чтобы получать уведомления по ПВЗ в вашей зоне.</p>
+        <Link to="/worker/zones">
+          <button className="secondary" style={{ marginTop: 10 }}>Настроить зону</button>
+        </Link>
+      </div>
+
       <div className="card">
         <h3>Мои отклики</h3>
         {applications.length === 0 ? (

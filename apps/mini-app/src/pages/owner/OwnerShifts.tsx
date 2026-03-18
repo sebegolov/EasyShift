@@ -62,6 +62,15 @@ export function OwnerShifts({ ownerId }: { ownerId: string }) {
           <Link to="/owner/create-shift"><button>Запросить работника</button></Link>
         </div>
       )}
+
+      <div className="card">
+        <h3>Быстрый доступ</h3>
+        <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+          <Link to="/owner/pvz">
+            <button className="secondary">Добавить/редактировать ПВЗ</button>
+          </Link>
+        </div>
+      </div>
     </div>
   );
 }

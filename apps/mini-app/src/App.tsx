@@ -5,6 +5,8 @@ import { OwnerLayout, OwnerShifts, OwnerCreateShift, OwnerShiftApplications } fr
 import { WorkerShifts, WorkerApply } from './pages/worker';
 import { RoleSelect } from './pages/RoleSelect';
 import { AccountScreen } from './pages/AccountScreen';
+import { OwnerPvz } from './pages/owner';
+import { WorkerZones } from './pages/worker';
 
 function AccountCornerButton() {
   const navigate = useNavigate();
@@ -185,11 +187,13 @@ function App() {
         />
         <Route path="/owner" element={<OwnerLayout user={user} />}>
           <Route index element={<OwnerShifts ownerId={ownerId!} />} />
+          <Route path="pvz" element={<OwnerPvz ownerId={ownerId!} />} />
           <Route path="create-shift" element={<OwnerCreateShift ownerId={ownerId!} />} />
           <Route path="shifts/:shiftId/applications" element={<OwnerShiftApplications ownerId={ownerId!} />} />
         </Route>
         <Route path="/worker" element={workerId ? <WorkerShifts workerId={workerId} userId={user.id} /> : <Navigate to="/" replace />} />
         <Route path="/worker/apply/:shiftId" element={workerId ? <WorkerApply workerId={workerId} /> : <Navigate to="/" replace />} />
+        <Route path="/worker/zones" element={workerId ? <WorkerZones workerProfileId={workerId} /> : <Navigate to="/" replace />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>

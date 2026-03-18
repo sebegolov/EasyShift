@@ -14,6 +14,7 @@ export function OwnerLayout({ user }: { user: UserMe }) {
     <div>
       <nav style={{ marginBottom: 16, display: 'flex', gap: 8 }}>
         <Link to="/owner">Мои смены</Link>
+        <Link to="/owner/pvz">ПВЗ</Link>
         <Link to="/owner/create-shift">Запросить работника</Link>
         <Link to="/">Главная</Link>
       </nav>
