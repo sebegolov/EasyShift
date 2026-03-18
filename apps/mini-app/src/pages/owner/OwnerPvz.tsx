@@ -5,8 +5,6 @@ type CreatePvzState = {
   title: string;
   address: string;
   city: string;
-  lat: string;
-  lng: string;
   requirements: string;
 };
 
@@ -19,11 +17,33 @@ export function OwnerPvz({ ownerId }: { ownerId: string }) {
     title: '',
     address: '',
     city: '',
-    lat: '',
-    lng: '',
     requirements: '',
   });
+  const [resolvedCoords, setResolvedCoords] = useState<{ lat: number; lng: number } | null>(null);
   const [submitting, setSubmitting] = useState(false);
+
+  const resolveAddressCoords = async (): Promise<{ lat: number; lng: number }> => {
+    const query = `${form.address.trim()}, ${form.city.trim()}`;
+    const url = `https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(query)}`;
+    const res = await fetch(url, {
+      headers: {
+        Accept: 'application/json',
+      },
+    });
+    if (!res.ok) {
+      throw new Error('Не удалось получить координаты адреса');
+    }
+    const items = (await res.json()) as Array<{ lat: string; lon: string }>;
+    if (!items.length) {
+      throw new Error('Не удалось определить координаты по адресу. Уточните адрес.');
+    }
+    const lat = Number(items[0].lat);
+    const lng = Number(items[0].lon);
+    if (!Number.isFinite(lat) || !Number.isFinite(lng)) {
+      throw new Error('Не удалось определить координаты по адресу.');
+    }
+    return { lat, lng };
+  };
 
   const load = async () => {
     setLoading(true);
@@ -51,25 +71,20 @@ export function OwnerPvz({ ownerId }: { ownerId: string }) {
       return;
     }
 
-    const latNum = Number(form.lat);
-    const lngNum = Number(form.lng);
-    if (!Number.isFinite(latNum) || !Number.isFinite(lngNum)) {
-      setError('Координаты lat/lng должны быть числами.');
-      return;
-    }
-
     setSubmitting(true);
     try {
+      const coords = await resolveAddressCoords();
+      setResolvedCoords(coords);
       await api.post('/pvz', {
         ownerId,
         title: form.title.trim(),
         address: form.address.trim(),
         city: form.city.trim(),
-        lat: latNum,
-        lng: lngNum,
+        lat: coords.lat,
+        lng: coords.lng,
         requirements: form.requirements.trim() ? form.requirements.trim() : undefined,
       });
-      setForm({ title: '', address: '', city: '', lat: '', lng: '', requirements: '' });
+      setForm({ title: '', address: '', city: '', requirements: '' });
       await load();
     } catch (e2) {
       setError(e2 instanceof Error ? e2.message : 'Ошибка создания ПВЗ');
@@ -95,12 +110,6 @@ export function OwnerPvz({ ownerId }: { ownerId: string }) {
           <label style={{ display: 'block', marginTop: 12, marginBottom: 8 }}>Город</label>
           <input value={form.city} onChange={(e) => setForm((p) => ({ ...p, city: e.target.value }))} required />
 
-          <label style={{ display: 'block', marginTop: 12, marginBottom: 8 }}>Широта (lat)</label>
-          <input value={form.lat} onChange={(e) => setForm((p) => ({ ...p, lat: e.target.value }))} placeholder="Напр. 55.7558" required />
-
-          <label style={{ display: 'block', marginTop: 12, marginBottom: 8 }}>Долгота (lng)</label>
-          <input value={form.lng} onChange={(e) => setForm((p) => ({ ...p, lng: e.target.value }))} placeholder="Напр. 37.6173" required />
-
           <label style={{ display: 'block', marginTop: 12, marginBottom: 8 }}>Требования (опционально)</label>
           <textarea
             value={form.requirements}
@@ -110,9 +119,14 @@ export function OwnerPvz({ ownerId }: { ownerId: string }) {
           />
 
           {error && <p className="error" style={{ marginTop: 12 }}>{error}</p>}
+          {resolvedCoords && (
+            <p className="muted" style={{ marginTop: 12 }}>
+              Координаты определены автоматически: {resolvedCoords.lat.toFixed(6)}, {resolvedCoords.lng.toFixed(6)}
+            </p>
+          )}
 
           <button type="submit" disabled={submitting} style={{ marginTop: 16, width: '100%' }}>
-            {submitting ? 'Сохранение…' : 'Добавить ПВЗ'}
+            {submitting ? 'Определяем адрес и сохраняем…' : 'Добавить ПВЗ'}
           </button>
         </form>
       </div>

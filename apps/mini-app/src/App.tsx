@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { api, UserMe } from './api/client';
 import { OwnerLayout, OwnerShifts, OwnerCreateShift, OwnerShiftApplications } from './pages/owner';
@@ -12,27 +12,11 @@ function AccountCornerButton() {
   const navigate = useNavigate();
   return (
     <div className="account-corner">
-      <button className="account-corner-btn" onClick={() => navigate('/account?openAccount=1')}>
+      <button className="account-corner-btn" onClick={() => navigate('/account')}>
         Аккаунт
       </button>
     </div>
   );
-}
-
-function WantsAccountFromUrl() {
-  const { search } = useLocation();
-  return useMemo(() => {
-    const sp = new URLSearchParams(search);
-    return sp.get('openAccount') === '1';
-  }, [search]);
-}
-
-function AccountRouteGuard({ user, refreshUser }: { user: UserMe; refreshUser: () => Promise<void> }) {
-  const wantsAccount = WantsAccountFromUrl();
-  if (!wantsAccount) {
-    return <Navigate to="/" replace />;
-  }
-  return <AccountScreen user={user} refreshUser={refreshUser} />;
 }
 
 function DebugBanner() {
@@ -74,10 +58,10 @@ function Start({ user, refreshUser }: { user: UserMe; refreshUser: () => Promise
   }
 
   if (user.role === 'owner' && !user.ownerProfile) {
-    return <Navigate to="/account?openAccount=1" replace />;
+    return <Navigate to="/account" replace />;
   }
   if (user.role === 'worker' && !user.workerProfile) {
-    return <Navigate to="/account?openAccount=1" replace />;
+    return <Navigate to="/account" replace />;
   }
 
   // existing: сразу на функционал по роли.
@@ -181,10 +165,7 @@ function App() {
       <AccountCornerButton />
       <Routes>
         <Route path="/" element={<Start user={user} refreshUser={refreshUser} />} />
-        <Route
-          path="/account"
-          element={<AccountRouteGuard user={user} refreshUser={refreshUser} />}
-        />
+        <Route path="/account" element={<AccountScreen user={user} refreshUser={refreshUser} />} />
         <Route path="/owner" element={<OwnerLayout user={user} />}>
           <Route index element={<OwnerShifts ownerId={ownerId!} />} />
           <Route path="pvz" element={<OwnerPvz ownerId={ownerId!} />} />

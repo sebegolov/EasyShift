@@ -47,9 +47,14 @@ export function WorkerShifts({ workerId, userId }: { workerId: string; userId: s
       <div className="card" style={{ marginTop: 12 }}>
         <h3>Зона работы</h3>
         <p className="muted">Настройте радиус/центр, чтобы получать уведомления по ПВЗ в вашей зоне.</p>
-        <Link to="/worker/zones">
-          <button className="secondary" style={{ marginTop: 10 }}>Настроить зону</button>
-        </Link>
+        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+          <Link to="/worker/zones">
+            <button className="secondary" style={{ marginTop: 10 }}>Настроить зону</button>
+          </Link>
+          <Link to="/account">
+            <button className="secondary" style={{ marginTop: 10 }}>Аккаунт</button>
+          </Link>
+        </div>
       </div>
 
       <div className="card">
