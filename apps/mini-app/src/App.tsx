@@ -72,10 +72,10 @@ function Start({ user, refreshUser }: { user: UserMe; refreshUser: () => Promise
   }
 
   if (user.role === 'owner' && !user.ownerProfile) {
-    return <Navigate to="/account" replace />;
+    return <Navigate to="/account?openAccount=1" replace />;
   }
   if (user.role === 'worker' && !user.workerProfile) {
-    return <Navigate to="/account" replace />;
+    return <Navigate to="/account?openAccount=1" replace />;
   }
 
   // existing: сразу на функционал по роли.

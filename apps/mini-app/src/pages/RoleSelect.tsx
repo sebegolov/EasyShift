@@ -16,7 +16,7 @@ export function RoleSelect({ user, refreshUser }: { user: UserMe; refreshUser: (
         targetRole,
       });
       await refreshUser();
-      navigate('/account');
+      navigate('/account?openAccount=1');
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Не удалось выбрать роль');
     } finally {
