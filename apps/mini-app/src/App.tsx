@@ -1,9 +1,55 @@
 import { useEffect, useState } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import { api, UserMe } from './api/client';
 import { OwnerLayout, OwnerShifts, OwnerCreateShift, OwnerShiftApplications } from './pages/owner';
 import { WorkerShifts, WorkerApply } from './pages/worker';
-import { Home } from './pages/Home';
+import { RoleSelect } from './pages/RoleSelect';
+import { AccountScreen } from './pages/AccountScreen';
+
+function AccountCornerButton() {
+  const navigate = useNavigate();
+  return (
+    <div className="account-corner">
+      <button className="account-corner-btn" onClick={() => navigate('/account')}>
+        Аккаунт
+      </button>
+    </div>
+  );
+}
+
+function Start({ user, refreshUser }: { user: UserMe; refreshUser: () => Promise<void> }) {
+  const sp = new URLSearchParams(window.location.search);
+  const screen = sp.get('screen');
+  const settings = sp.get('settings');
+  const from = sp.get('from');
+
+  const wantsAccount = (screen === 'account' || settings === 'account') && from === 'account';
+  if (wantsAccount) {
+    return <Navigate to="/account" replace />;
+  }
+
+  // draft/new: роль не выбрана (в бэкенде это может быть `draft`/другое значение).
+  if (user.role !== 'owner' && user.role !== 'worker') {
+    return <RoleSelect user={user} refreshUser={refreshUser} />;
+  }
+
+  if (user.role === 'owner' && !user.ownerProfile) {
+    return <Navigate to="/account" replace />;
+  }
+  if (user.role === 'worker' && !user.workerProfile) {
+    return <Navigate to="/account" replace />;
+  }
+
+  // existing: сразу на функционал по роли.
+  if (user.role === 'owner') {
+    return <Navigate to="/owner" replace />;
+  }
+  if (user.role === 'worker') {
+    return <Navigate to="/worker" replace />;
+  }
+
+  return <Navigate to="/" replace />;
+}
 
 function App() {
   const [user, setUser] = useState<UserMe | null>(null);
@@ -28,6 +74,16 @@ function App() {
       .catch(() => setUser(null))
       .finally(() => setLoading(false));
   }, [telegramId]);
+
+  const refreshUser = async () => {
+    if (!telegramId) return;
+    try {
+      const u = await api.get<UserMe>(`/users/me?telegramId=${encodeURIComponent(telegramId)}`);
+      setUser(u);
+    } catch {
+      setUser(null);
+    }
+  };
 
   useEffect(() => {
     if (!user?.telegramId) {
@@ -81,8 +137,10 @@ function App() {
 
   return (
     <BrowserRouter>
+      <AccountCornerButton />
       <Routes>
-        <Route path="/" element={<Home user={user} />} />
+        <Route path="/" element={<Start user={user} refreshUser={refreshUser} />} />
+        <Route path="/account" element={<AccountScreen user={user} refreshUser={refreshUser} />} />
         <Route path="/owner" element={<OwnerLayout user={user} />}>
           <Route index element={<OwnerShifts ownerId={ownerId!} />} />
           <Route path="create-shift" element={<OwnerCreateShift ownerId={ownerId!} />} />

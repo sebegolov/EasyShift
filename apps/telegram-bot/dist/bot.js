@@ -8,19 +8,19 @@ function buildMiniAppUrl(miniAppUrl, extraQuery) {
     if (!miniAppUrl) {
         return '';
     }
-    // Если в MINI_APP_URL из .env уже "прилип" settings=account — не тащим это при обычном открытии.
-    // settings=account добавляется обратно только когда явно запрошено в extraQuery (команда /account).
+    // Если в MINI_APP_URL из .env уже "прилип" screen=account — не тащим это при обычном открытии.
+    // screen=account добавляется обратно только когда явно запрошено в extraQuery (команда /account).
     const stripSettingsAccountFromBase = (urlStr) => {
         try {
             const u = new URL(urlStr);
-            if (u.searchParams.get('settings') === 'account') {
-                u.searchParams.delete('settings');
+            if (u.searchParams.get('screen') === 'account') {
+                u.searchParams.delete('screen');
                 u.searchParams.delete('from');
             }
             return u.toString();
         }
         catch {
-            return urlStr.replace(/([?&])settings=account(&|$)/, '$1').replace(/([?&])from=account(&|$)/, '$1');
+            return urlStr.replace(/([?&])screen=account(&|$)/, '$1').replace(/([?&])from=account(&|$)/, '$1');
         }
     };
     const cleanBase = stripSettingsAccountFromBase(miniAppUrl);
@@ -115,7 +115,7 @@ function buildAccountKeyboard(miniAppUrl) {
     }
     return telegraf_1.Markup.inlineKeyboard([
         [
-            telegraf_1.Markup.button.webApp(messages_1.messages.openMiniApp, buildMiniAppUrl(miniAppUrl, 'settings=account&from=account')),
+            telegraf_1.Markup.button.webApp(messages_1.messages.openMiniApp, buildMiniAppUrl(miniAppUrl, 'screen=account&from=account')),
         ],
     ]);
 }

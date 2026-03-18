@@ -7,13 +7,17 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
       // Защита от автопоказов "личного кабинета" при обычном открытии.
-      // Если передали settings=account, но не передали from=account, то убираем settings из URL до загрузки приложения.
+      // Если передали screen=account (или legacy settings=account), но не передали from=account — убираем эти параметры до загрузки приложения.
       (function () {
         try {
           var url = new URL(window.location.href);
-          var settings = url.searchParams.get('settings');
+          var screen = url.searchParams.get('screen');
+          var legacySettings = url.searchParams.get('settings');
           var from = url.searchParams.get('from');
-          if (settings === 'account' && from !== 'account') {
+
+          var isAccountRequest = screen === 'account' || legacySettings === 'account';
+          if (isAccountRequest && from !== 'account') {
+            url.searchParams.delete('screen');
             url.searchParams.delete('settings');
             url.searchParams.delete('from');
             history.replaceState({}, '', url.toString());

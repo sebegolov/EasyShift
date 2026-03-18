@@ -27,14 +27,53 @@ export const api = {
   post: <T>(path: string, body?: unknown) =>
     request<T>(path, { method: 'POST', body: body ? JSON.stringify(body) : undefined }),
   delete: <T>(path: string) => request<T>(path, { method: 'DELETE' }),
+  switchRole: (input: SwitchRoleInput) =>
+    request<SwitchRoleResponse>('/users/switch-role', {
+      method: 'POST',
+      body: JSON.stringify(input),
+    }),
+  upsertOwnerProfile: (input: UpsertOwnerProfileInput) =>
+    request<unknown>('/users/owner-profile', {
+      method: 'POST',
+      body: JSON.stringify(input),
+    }),
+  upsertWorkerProfile: (input: UpsertWorkerProfileInput) =>
+    request<unknown>('/users/worker-profile', {
+      method: 'POST',
+      body: JSON.stringify(input),
+    }),
+  deleteAccount: (input: DeleteAccountInput) => {
+    const qs = new URLSearchParams();
+    qs.set('userId', input.userId);
+    if (input.telegramId) qs.set('telegramId', String(input.telegramId));
+    return request<DeleteAccountResponse>(`/users/me?${qs.toString()}`, { method: 'DELETE' });
+  },
 };
+
+export type TargetRole = 'owner' | 'worker';
 
 export interface UserMe {
   id: string;
   role: string;
+  status?: string;
   telegramId?: string | null;
-  ownerProfile?: { id: string };
-  workerProfile?: { id: string };
+  fullName?: string;
+  phone?: string | null;
+  ownerProfile?: OwnerProfile | null;
+  workerProfile?: WorkerProfile | null;
+}
+
+export interface OwnerProfile {
+  id: string;
+  companyName?: string | null;
+  contactName: string;
+  contactPhone: string;
+}
+
+export interface WorkerProfile {
+  id: string;
+  city: string;
+  expectedRate?: number | null;
 }
 
 export interface PVZ {
@@ -90,4 +129,38 @@ export interface NotificationEvent {
   eventType: string;
   payload: { shiftId?: string };
   createdAt: string;
+}
+
+export interface SwitchRoleInput {
+  userId: string;
+  targetRole: TargetRole;
+}
+
+export interface SwitchRoleResponse extends UserMe {
+  nextStep?: string;
+}
+
+export interface UpsertOwnerProfileInput {
+  userId: string;
+  contactName: string;
+  contactPhone: string;
+  companyName?: string | null;
+}
+
+export interface UpsertWorkerProfileInput {
+  userId: string;
+  city: string;
+  expectedRate?: number | null;
+  experienceSummary?: string | null;
+}
+
+export interface DeleteAccountInput {
+  userId: string;
+  telegramId?: string | null;
+}
+
+export interface DeleteAccountResponse {
+  ok: boolean;
+  userId: string;
+  status: string;
 }
