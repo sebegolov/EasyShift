@@ -9,6 +9,7 @@ function App() {
   const [user, setUser] = useState<UserMe | null>(null);
   const [loading, setLoading] = useState(true);
   const [telegramId, setTelegramId] = useState<string | null>(null);
+  const [isDevAdmin, setIsDevAdmin] = useState(false);
 
   useEffect(() => {
     const tg = (window as unknown as { Telegram?: { WebApp?: { initData?: string; initDataUnsafe?: { user?: { id: number } } } } }).Telegram?.WebApp;
@@ -27,6 +28,44 @@ function App() {
       .catch(() => setUser(null))
       .finally(() => setLoading(false));
   }, [telegramId]);
+
+  useEffect(() => {
+    if (!user?.telegramId) {
+      setIsDevAdmin(false);
+      return;
+    }
+
+    // Простейшая проверка на developer access: если /admin/stats доступен — показываем админ UI.
+    api
+      .get(`/admin/stats?telegramId=${encodeURIComponent(String(user.telegramId))}`)
+      .then(() => setIsDevAdmin(true))
+      .catch(() => setIsDevAdmin(false));
+  }, [user]);
+
+  useEffect(() => {
+    if (isDevAdmin) return;
+
+    // На случай, если "admin panel" приходит из вшитого (старого) miniapp-tools, прячем элементы по эвристике.
+    const hideBySelectors = [
+      '.miniapp-tools-launchers',
+      '[class*="miniapp-tools"]',
+      '[data-admin]',
+      '[data-dev-admin]',
+    ];
+    hideBySelectors.forEach((sel) => {
+      document.querySelectorAll(sel).forEach((el) => {
+        (el as HTMLElement).style.display = 'none';
+      });
+    });
+
+    const nodes = Array.from(document.querySelectorAll('a, button'));
+    nodes.forEach((el) => {
+      const text = (el as HTMLElement).innerText || el.textContent || '';
+      if (/dev(er)?\s*admin|админ|админ\s*панел/i.test(text)) {
+        (el as HTMLElement).style.display = 'none';
+      }
+    });
+  }, [isDevAdmin]);
 
   if (loading) return <div className="card">Загрузка…</div>;
   if (!user) {

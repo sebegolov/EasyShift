@@ -32,6 +32,7 @@ export const api = {
 export interface UserMe {
   id: string;
   role: string;
+  telegramId?: string | null;
   ownerProfile?: { id: string };
   workerProfile?: { id: string };
 }

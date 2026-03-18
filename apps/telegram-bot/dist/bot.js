@@ -8,8 +8,24 @@ function buildMiniAppUrl(miniAppUrl, extraQuery) {
     if (!miniAppUrl) {
         return '';
     }
-    const hasQuery = miniAppUrl.includes('?');
-    const base = `${miniAppUrl}${hasQuery ? '&' : '?'}v=20260318`;
+    // Если в MINI_APP_URL из .env уже "прилип" settings=account — не тащим это при обычном открытии.
+    // settings=account добавляется обратно только когда явно запрошено в extraQuery (команда /account).
+    const stripSettingsAccountFromBase = (urlStr) => {
+        try {
+            const u = new URL(urlStr);
+            if (u.searchParams.get('settings') === 'account') {
+                u.searchParams.delete('settings');
+                u.searchParams.delete('from');
+            }
+            return u.toString();
+        }
+        catch {
+            return urlStr.replace(/([?&])settings=account(&|$)/, '$1').replace(/([?&])from=account(&|$)/, '$1');
+        }
+    };
+    const cleanBase = stripSettingsAccountFromBase(miniAppUrl);
+    const hasQuery = cleanBase.includes('?');
+    const base = `${cleanBase}${hasQuery ? '&' : '?'}v=20260318`;
     if (!extraQuery) {
         return base;
     }
@@ -98,7 +114,9 @@ function buildAccountKeyboard(miniAppUrl) {
         return undefined;
     }
     return telegraf_1.Markup.inlineKeyboard([
-        [telegraf_1.Markup.button.webApp(messages_1.messages.openMiniApp, buildMiniAppUrl(miniAppUrl, 'settings=account'))],
+        [
+            telegraf_1.Markup.button.webApp(messages_1.messages.openMiniApp, buildMiniAppUrl(miniAppUrl, 'settings=account&from=account')),
+        ],
     ]);
 }
 async function syncTelegramInterface(bot, miniAppUrl) {
