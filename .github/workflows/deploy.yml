@@ -46,5 +46,7 @@ jobs:
             sudo -u easyshift -H pm2 restart easyshift-bot --update-env || true
 
             # Перезагрузить Nginx, если конфиги менялись
-            nginx -t && sudo systemctl reload nginx
+            # Если nginx проверка упадёт, деплой всё равно считаем успешным,
+            # чтобы UI (mini-app dist) и код успели доехать.
+            nginx -t && sudo systemctl reload nginx || true
 
