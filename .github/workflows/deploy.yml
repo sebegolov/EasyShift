@@ -36,7 +36,9 @@ jobs:
 
             # Применить схему БД (опционально, если есть изменения)
             if [ -f apps/api/prisma/schema.prisma ]; then
-              npx prisma db push --schema apps/api/prisma/schema.prisma
+              # Не валим весь deploy, если db push временно падает (например, из-за env/соединения).
+              # UI-изменения (mini-app dist) должны доходить всегда.
+              npx prisma db push --schema apps/api/prisma/schema.prisma || true
             fi
 
             # Перезапустить процессы API и бота под пользователем easyshift
