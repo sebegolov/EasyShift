@@ -30,6 +30,10 @@ jobs:
 
             cd /srv/easyshift/current
 
+            # Git может ругаться на "dubious ownership" из-за отличий владельца каталога.
+            # Добавляем папку в safe.directory, чтобы deploy не падал.
+            git config --global --add safe.directory /srv/easyshift/current || true
+
             # Обновить код из GitHub (репозиторий должен быть уже настроен на сервере)
             git fetch origin main
             git reset --hard origin/main
