@@ -1,5 +1,10 @@
 name: Deploy to EasyShift VDS
 
+env:
+  # Node.js 20 на GitHub Actions runners больше не поддерживается по умолчанию.
+  # Опт-ин на Node.js 24 сейчас, чтобы не ловить неожиданные несовместимости.
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
 on:
   push:
     branches:
