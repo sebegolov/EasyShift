@@ -6,6 +6,16 @@
     <title>EasyShift Mini App</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
+      // Явно указываем базовый URL API, чтобы frontend всегда ходил в /api/ через Nginx.
+      // На сервере: https://5.42.117.107.sslip.io/api/ проксирует NestJS API.
+      (function () {
+        try {
+          if (!window.__API_BASE__) {
+            window.__API_BASE__ = `${window.location.origin}/api`;
+          }
+        } catch (e) {}
+      })();
+
       // Защита от автопоказов "личного кабинета" при обычном открытии.
       // Если передали openAccount=1 — значит аккаунт запрошен явно (кнопка/команда).
       // Если openAccount!=1, то убираем потенциально “автозапускающие” параметры screen/settings/from.
