@@ -10,10 +10,11 @@ const base = getBaseUrl();
 
 async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
   const url = path.startsWith('http') ? path : `${base}${path}`;
+  const hasBody = options.body !== undefined && options.body !== null && String(options.body).length > 0;
   const res = await fetch(url, {
     ...options,
     headers: {
-      'Content-Type': 'application/json',
+      ...(hasBody ? { 'Content-Type': 'application/json' } : {}),
       ...options.headers,
     },
   });
